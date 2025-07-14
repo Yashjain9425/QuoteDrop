@@ -30,7 +30,11 @@ const register = async(req,res)=>{
 
 const login = async(req,res) => {
     try{
+
     const {email,password} = req.body;
+        if (!email || !password) {
+        return res.status(400).json({ message: "Email and password are required." });
+}
 
     const found = await userModel.findOne({email});
 
@@ -60,10 +64,22 @@ const login = async(req,res) => {
         console.log(err)
         res.status(500).send("Something went wrong");
     }
+}
 
 
+const getUser = async(req,res) =>{
+    try{
+        const user = req.params.id;
+        const found = await userModel.findOne({_id:user});
+        res.status(200).json(found);
+    }
+    catch(err)
+    {
+        console.log(err);
+        res.status(500).send("Something went wrong");
+    }
 
 }
 
-export {register,login};
+export {register,login,getUser};
 
